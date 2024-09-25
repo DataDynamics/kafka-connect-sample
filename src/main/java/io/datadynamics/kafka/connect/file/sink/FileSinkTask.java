@@ -1,4 +1,4 @@
-package io.datadynamics.kafka.connect.sink;
+package io.datadynamics.kafka.connect.file.sink;
 
 import org.apache.kafka.connect.sink.SinkRecord;
 import org.apache.kafka.connect.sink.SinkTask;

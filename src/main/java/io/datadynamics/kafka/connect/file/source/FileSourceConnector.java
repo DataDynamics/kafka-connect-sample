@@ -1,4 +1,4 @@
-package io.datadynamics.kafka.connect.source;
+package io.datadynamics.kafka.connect.file.source;
 
 import org.apache.kafka.common.config.ConfigDef;
 import org.apache.kafka.connect.source.SourceConnector;

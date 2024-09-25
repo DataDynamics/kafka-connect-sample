@@ -1,4 +1,4 @@
-package io.datadynamics.kafka.connect.sink;
+package io.datadynamics.kafka.connect.file.sink;
 
 import org.apache.kafka.common.config.ConfigDef;
 import org.apache.kafka.connect.connector.Task;
