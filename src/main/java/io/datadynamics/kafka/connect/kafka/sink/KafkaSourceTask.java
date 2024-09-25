@@ -16,6 +16,7 @@ public class KafkaSourceTask extends SourceTask {
     private KafkaConsumer<String, String> consumer;
     private String sourceTopic;
     private String targetTopic;
+    private Integer pollIntervalMs;
 
     @Override
     public String version() {
@@ -28,6 +29,7 @@ public class KafkaSourceTask extends SourceTask {
         String groupId = props.get("group.id");
         sourceTopic = props.get("source.topic");
         targetTopic = props.get("target.topic");
+        pollIntervalMs = Integer.parseInt(props.get("poll.interval.ms"));
 
         Properties properties = new Properties();
         properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
@@ -53,8 +55,8 @@ public class KafkaSourceTask extends SourceTask {
                     Schema.STRING_SCHEMA, // 값의 스키마 (생략 가능)
                     consumerRecord.value()); // 파일에서 읽어 들인 실제 데이터
             records.add(sourceRecord);
-
         }
+        Thread.sleep(pollIntervalMs);
         return records;
     }
 
