@@ -1,0 +1,9 @@
+{
+	"name": "file-sink-connector",
+	"config": {
+		"connector.class": "io.datadynamics.kafka.connect.sink.FileSinkConnector",
+		"file": "/path/to/output/file.txt",
+		"tasks.max": "1",
+		"topics": "your_topic_name"
+	}
+}

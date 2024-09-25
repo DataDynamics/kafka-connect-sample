@@ -1,0 +1,8 @@
+{
+	"name": "file-source-connector",
+	"config": {
+		"connector.class": "io.datadynamics.kafka.connect.source.FileSourceConnector",
+		"file": "/path/to/input/file.txt",
+		"tasks.max": "1"
+	}
+}
