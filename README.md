@@ -16,5 +16,4 @@ key.converter=org.apache.kafka.connect.json.JsonConverter
 value.converter=org.apache.kafka.connect.json.JsonConverter
 tasks.max=1
 schema.registry.url=http://localhost:8081
-poll.interval.ms=5000
 ```
