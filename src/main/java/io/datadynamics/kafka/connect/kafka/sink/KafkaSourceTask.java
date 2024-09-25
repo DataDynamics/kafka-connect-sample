@@ -44,7 +44,7 @@ public class KafkaSourceTask extends SourceTask {
     @Override
     public List<SourceRecord> poll() throws InterruptedException {
         List<SourceRecord> records = new ArrayList<>();
-        ConsumerRecords<String, String> consumerRecords = consumer.poll(Duration.ofMillis(1000));
+        ConsumerRecords<String, String> consumerRecords = consumer.poll(Duration.ofMillis(pollIntervalMs));
         for (ConsumerRecord<String, String> consumerRecord : consumerRecords) {
             SourceRecord sourceRecord = new SourceRecord(
                     Collections.singletonMap("source.topic", sourceTopic),
@@ -56,7 +56,6 @@ public class KafkaSourceTask extends SourceTask {
                     consumerRecord.value()); // 파일에서 읽어 들인 실제 데이터
             records.add(sourceRecord);
         }
-        Thread.sleep(pollIntervalMs);
         return records;
     }
 
