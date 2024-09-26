@@ -44,7 +44,9 @@
 
 #### 공통 속성
 
-```
+Kafka Connector에서 사용하는 공통 속성은 다음과 같습니다.
+
+```properties
 bootstrap.servers=localhost:9092
 key.converter=org.apache.kafka.connect.json.JsonConverter
 value.converter=org.apache.kafka.connect.json.JsonConverter
@@ -56,7 +58,7 @@ schema.registry.url=http://localhost:8081
 
 분산 모드로 실행하기 위하서 다음과 같이 환경설정 파일을 구성합니다.
 
-```
+```properties
 # config/connect-distributed.properties
 
 # Bootstrap servers for Kafka 클러스터에 연결하기 위한 브로커 주소들
@@ -84,13 +86,13 @@ rest.port=8083
 
 다음의 커맨드 라인으로 Connector를 실행합니다.
 
-```
-bin/connect-distributed.sh config/connect-distributed.properties
+```bash
+# bin/connect-distributed.sh config/connect-distributed.properties
 ```
 
 Connector를 배포하기 위해서 다음과 같이 JSON 파일을 작성합니다.
 
-```
+```json
 {
     "name": "my-source-connector",
     "config": {
@@ -104,7 +106,7 @@ Connector를 배포하기 위해서 다음과 같이 JSON 파일을 작성합니
 
 REST API를 호출하여 Connector를 생성합니다.
 
-```
+```bash
 # 커넥터 생성 요청
-curl -X POST -H "Content-Type: application/json" --data @config/connector-name.json http://localhost:8083/connectors
+# curl -X POST -H "Content-Type: application/json" --data @config/connector-name.json http://localhost:8083/connectors
 ```
