@@ -133,3 +133,12 @@ REST API를 호출하여 Connector를 생성합니다.
 # 커넥터 생성 요청
 # curl -X POST -H "Content-Type: application/json" --data @config/connector-name.json http://localhost:8083/connectors
 ```
+
+## 참고
+
+* [Deploy Kafka Connect](https://developer.confluent.io/courses/kafka-connect/deployment/?utm_medium=sem&utm_source=google&utm_campaign=ch.sem_br.nonbrand_tp.prs_tgt.dsa_mt.dsa_rgn.apac_lng.eng_dv.all_con.confluent-developer&utm_term=&creative=&device=c&placement=&gad_source=1&gclid=CjwKCAjw9eO3BhBNEiwAoc0-jYXuADg1BhBHF88VmwlvE272B0wlrcnPTnb9ZIVV3kP8CqQRZDHNcRoCFhQQAvD_BwE)
+* [How to Use Kafka Connect - Get Started](https://docs.confluent.io/platform/current/connect/userguide.html)
+* [Apache Kafka Guide #51 Kafka Connect: Standalone vs Distributed Mode](https://medium.com/apache-kafka-from-zero-to-hero/apache-kafka-guide-51-kafka-connect-standalone-vs-distributed-mode-e4486eb4074f#id_token=eyJhbGciOiJSUzI1NiIsImtpZCI6IjVhYWZmNDdjMjFkMDZlMjY2Y2NlMzk1YjIxNDVjN2M2ZDQ3MzBlYTUiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiIyMTYyOTYwMzU4MzQtazFrNnFlMDYwczJ0cDJhMmphbTRsamRjbXMwMHN0dGcuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiIyMTYyOTYwMzU4MzQtazFrNnFlMDYwczJ0cDJhMmphbTRsamRjbXMwMHN0dGcuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDU5OTk0NTcwMzk1MzY5ODI3MDciLCJlbWFpbCI6ImZoYXJlbmhlaXRAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsIm5iZiI6MTcyNzYxMDkwNywibmFtZSI6Iuq5gOuzkeqzpCIsInBpY3R1cmUiOiJodHRwczovL2xoMy5nb29nbGV1c2VyY29udGVudC5jb20vYS9BQ2c4b2NKREZJb0pabWJFdHNQUC1NUGJQVHU0UzBlSGpxWHV5czloN0hHeTVuRG41aFlVeUJzdj1zOTYtYyIsImdpdmVuX25hbWUiOiLrs5Hqs6QiLCJmYW1pbHlfbmFtZSI6Iuq5gCIsImlhdCI6MTcyNzYxMTIwNywiZXhwIjoxNzI3NjE0ODA3LCJqdGkiOiI5NzFjMDU4ZjJmZGE0MzM2YTQyYWY1YzlkZjBiYTUxMDg3ZWNmNjE0In0.HZ3tJGzwGAl0bJeX0mK-VL-YGqMCEXRmF9vEBTWp2S0jR75LFs03pEKCnYHb8WAxF0YsR4Ngxv6DgAVDEzONyIFeP_k-jdZ34jJx8K0TWNIalQyZPDzhXQMpj8kz3owWyrfOI-LHOyQEY6npa1vKtFuZzuctsowrv_fike0uP7IWV2uNrwsHfhEOHFrohIzA9cy7eLSsxy2D9NgCDuM-57Y5RpuNnUV5l_6_e8b3TtTmJbprl-A6ZVusGkdEirhYcLCLqCCLqcyJkO06R-LuiV35oTERuudBvU57W00T2jsY9z-rw433QGPr6IsAAdV8JQJxFFysJyXYRYA8Y7sWjw)
+* [Kafka Connect CLI Tutorial](https://learn.conduktor.io/kafka/kafka-connect-cli-tutorial/)
+* [How to Install and Run a Custom Connector](https://github.com/enfuse/kafka-connect-demo/blob/master/docs/install-connector.md)
+* [(YouTube) Kafka Connect Standalone Mode Example](https://www.youtube.com/watch?app=desktop&v=G6YlWrKZK0E)
