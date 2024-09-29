@@ -45,6 +45,7 @@
 테스트를 위해서 Kafka를 다운로드하고 다음과 같이 환경을 구성합니다.
 
 ```
+# DOWNLOAD KAFKA
 # wget https://archive.apache.org/dist/kafka/3.4.1/kafka_2.12-3.4.1.tgz
 # tar xvfz kafka_2.12-3.4.1.tgz
 # cd kafka_2.12-3.4.1/bin
