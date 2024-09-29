@@ -40,6 +40,28 @@
   * 장애 발생시 타 Task가 대신 수행
   * 중앙 집중식 관리 (REST API)
 
+### Kafka 설정
+
+테스트를 위해서 Kafka를 다운로드하고 다음과 같이 환경을 구성합니다.
+
+```
+# wget https://archive.apache.org/dist/kafka/3.4.1/kafka_2.12-3.4.1.tgz
+# tar xvfz kafka_2.12-3.4.1.tgz
+# cd kafka_2.12-3.4.1/bin
+
+# RUN ZK
+# sh zookeeper-server-start.sh ../config/zookeeper.properties
+
+# RUN KAFKA
+# sh kafka-server-start.sh ../config/server.properties
+
+# CREATE TOPIC
+# sh kafka-topics.sh --create --topic mytopic --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+
+# LIST TOPICS
+# sh kafka-topics.sh --list --bootstrap-server localhost:9092
+```
+
 ### Kafka Connector 관련 속성
 
 #### 공통 속성
