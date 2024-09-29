@@ -1,0 +1,12 @@
+{
+	"name": "kafka-sqs-sink-connector",
+	"config": {
+		"connector.class": "io.datadynamics.kafka.connect.kafka.sink.KafkaSourceConnector",
+		"tasks.max": "1",
+		"bootstrap.servers": "localhost:9092",
+		"group.id": "sqs-consumer",
+		"source.topic": "mytopic",
+		"target.topic": "mytopic1",
+		"poll.interval.ms": 1000
+	}
+}

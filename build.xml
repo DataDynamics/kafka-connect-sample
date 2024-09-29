@@ -1,0 +1,12 @@
+<?xml version="1.0"  encoding="UTF-8"?>
+<project name="deploy" default="copy" basedir=".">
+
+    <property name="kafka.libs.dir" value="/Users/fharenheit/projects/kafka/kafka/libs"/>
+
+    <target name="copy">
+        <copy todir="${kafka.libs.dir}" verbose="true" overwrite="true">
+            <fileset dir="target" includes="*.jar"/>
+        </copy>
+    </target>
+
+</project>

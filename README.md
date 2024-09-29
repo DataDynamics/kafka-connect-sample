@@ -142,6 +142,13 @@ REST API를 호출하여 Connector를 생성합니다.
 # curl -X POST -H "Content-Type: application/json" --data @config/connector-name.json http://localhost:8083/connectors
 ```
 
+테스트를 위해서 Kafka에 내장되어 있는 Console Producer를 이용하여 메시지를 송신합니다.
+
+```bash
+# cd <KAFKA_HOME>/bin
+# sh kafka-console-producer.sh --topic mytopic --bootstrap-server localhost:9092
+```
+
 ### 분산 모드로 실행
 
 분산 모드로 실행하기 위해서 다음과 같이 환경설정 파일을 구성합니다(예; `demo-connect-distributed.properties`).
