@@ -107,9 +107,13 @@ status.storage.replication.factor=1
 rest.port=8083
 ```
 
-다음의 커맨드 라인으로 Connector를 실행합니다.
+다음의 커맨드 라인으로 Connector를 실행합니다(Standalone, Distributed 모드에 따라서 다르게 실행할 수 있습니다.).
 
 ```bash
+# STANDALONE MODE
+# bin/connect-standalone.sh config/connect-standalone.properties
+
+# DISTRIBUTED MODE
 # bin/connect-distributed.sh config/connect-distributed.properties
 ```
 
