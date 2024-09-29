@@ -1,5 +1,5 @@
 {
-	"name": "kafka-sqs-sink-connector",
+	"name": "sqs-source-connector",
 	"config": {
 		"connector.class": "io.datadynamics.kafka.connect.kafka.sink.KafkaSourceConnector",
 		"tasks.max": "1",
