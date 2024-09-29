@@ -130,7 +130,7 @@ Connector를 배포하기 위해서 다음과 같이 JSON 파일을 작성합니
         "connector.class": "org.apache.kafka.connect.file.FileStreamSourceConnector",
         "tasks.max": "1",
         "file": "/path/to/input/file",
-        "topic": "my-topic"
+        "topic": "mytopic"
     }
 }
 ```
