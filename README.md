@@ -142,32 +142,6 @@ REST API를 호출하여 Connector를 생성합니다.
 # curl -X POST -H "Content-Type: application/json" --data @config/connector-name.json http://localhost:8083/connectors
 ```
 
-## 트러블 슈팅
-
-### `Failed to find any class that implements Connector and which name matches FileStreamSink`
-
-Kafka Connector 클래스를 못찾는 현상으로써 Kafka Connector는 plugin이므로 plugin의 경로를 지정해야 합니다.
-Kafka Connector를 실행시키기 위해서 필요한 환경설정 파일 (예; `connect-standalone.properties`)에 다음과 같이 Kafka Connector를 포함하는 JAR 파일을 지정합니다.
-
-```properties
-plugin.path=libs/connect-file-3.4.0.jar
-```
-
-기본 설정 파일 템플릿에는 다음과 같이 설명이 추가되어 있습니다. 디렉토리를 지정하거나, JAR 파일을 지정할 수 있습니다.
-
-```properties
-# Set to a list of filesystem paths separated by commas (,) to enable class loading isolation for plugins
-# (connectors, converters, transformations). The list should consist of top level directories that include 
-# any combination of: 
-# a) directories immediately containing jars with plugins and their dependencies
-# b) uber-jars with plugins and their dependencies
-# c) directories immediately containing the package directory structure of classes of plugins and their dependencies
-# Note: symlinks will be followed to discover dependencies or plugins.
-# Examples: 
-# plugin.path=/usr/local/share/java,/usr/local/share/kafka/plugins,/opt/connectors,
-#plugin.path=
-```
-
 ### 분산 모드로 실행
 
 분산 모드로 실행하기 위해서 다음과 같이 환경설정 파일을 구성합니다(예; `demo-connect-distributed.properties`).
@@ -199,6 +173,32 @@ rest.port=8083
 ```
 
 나머지 설정은 Standalone 모드와 동일합니다.
+
+## 트러블 슈팅
+
+### `Failed to find any class that implements Connector and which name matches FileStreamSink`
+
+Kafka Connector 클래스를 못찾는 현상으로써 Kafka Connector는 plugin이므로 plugin의 경로를 지정해야 합니다.
+Kafka Connector를 실행시키기 위해서 필요한 환경설정 파일 (예; `connect-standalone.properties`)에 다음과 같이 Kafka Connector를 포함하는 JAR 파일을 지정합니다.
+
+```properties
+plugin.path=libs/connect-file-3.4.0.jar
+```
+
+기본 설정 파일 템플릿에는 다음과 같이 설명이 추가되어 있습니다. 디렉토리를 지정하거나, JAR 파일을 지정할 수 있습니다.
+
+```properties
+# Set to a list of filesystem paths separated by commas (,) to enable class loading isolation for plugins
+# (connectors, converters, transformations). The list should consist of top level directories that include 
+# any combination of: 
+# a) directories immediately containing jars with plugins and their dependencies
+# b) uber-jars with plugins and their dependencies
+# c) directories immediately containing the package directory structure of classes of plugins and their dependencies
+# Note: symlinks will be followed to discover dependencies or plugins.
+# Examples: 
+# plugin.path=/usr/local/share/java,/usr/local/share/kafka/plugins,/opt/connectors,
+#plugin.path=
+```
 
 ## 참고
 
