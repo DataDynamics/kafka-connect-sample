@@ -187,6 +187,7 @@ rest.port=8083
 
 Kafka Connector 클래스를 못찾는 현상으로써 Kafka Connector는 plugin이므로 plugin의 경로를 지정해야 합니다.
 Kafka Connector를 실행시키기 위해서 필요한 환경설정 파일 (예; `connect-standalone.properties`)에 다음과 같이 Kafka Connector를 포함하는 JAR 파일을 지정합니다.
+**JAR 파일 경로 대신 JAR 파일이 있는 경로도 설정할 수 있습니다.**
 
 ```properties
 plugin.path=libs/connect-file-3.4.0.jar
