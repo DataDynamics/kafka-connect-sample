@@ -67,7 +67,7 @@
 
 #### 공통 속성
 
-Kafka Connector에서 사용하는 공통 속성은 다음과 같습니다.
+Kafka Connector에서 사용하는 공통 속성은 다음과 같습니다(예; `demo-connect-standalone.properties`). 
 
 ```properties
 bootstrap.servers=localhost:9092
@@ -77,9 +77,100 @@ tasks.max=1
 schema.registry.url=http://localhost:8081
 ```
 
+### Standalone 모드로 실행
+
+테스트를 위해서 `demo-connect-standalone.properties` 파일을 다음과 같이 작성했습니다.
+
+```properties
+bootstrap.servers=localhost:9092
+
+key.converter=org.apache.kafka.connect.storage.StringConverter
+value.converter=org.apache.kafka.connect.storage.StringConverter
+
+key.converter.schemas.enable=true
+value.converter.schemas.enable=true
+
+offset.storage.file.filename=/temp/connect.offsets
+offset.flush.interval.ms=10000
+
+rest.port=8083
+
+plugin.path=/Users/fharenheit/Projects/kafka/kafka/libs
+```
+
+이제 Kafka Connector의 설정 파일을 다음과 같이 작성합니다(예; `demo-connect-file-sink.properties`).
+
+```properties
+name=local-file-sink
+# 아래 connector.class 설정 모두 적용됨
+#connector.class=FileStreamSink
+connector.class=org.apache.kafka.connect.file.FileStreamSinkConnector
+tasks.max=1
+file=/temp/test.sink.txt
+topics=mytopic
+```
+
+다음의 커맨드 라인으로 Connector를 실행합니다(Standalone, Distributed 모드에 따라서 다르게 실행할 수 있습니다).
+
+```bash
+# STANDALONE MODE
+# bin/connect-standalone.sh ../config/demo-connect-standalone.properties ../config/demo-connect-file-sink.properties 
+
+# DISTRIBUTED MODE
+# bin/connect-distributed.sh ../config/demo-connect-distributed.properties ../config/demo-connect-file-sink.properties
+```
+
+Kafka Connector의 `.properties` 파일을 Kafka Connector 실행시 지정하지 않는 경우 다음과 같이 REST API로 등록할수 있습니다.
+Connector를 배포하기 위해서 다음과 같이 JSON 파일을 작성합니다.
+
+```json
+{
+    "name": "my-source-connector",
+    "config": {
+        "connector.class": "org.apache.kafka.connect.file.FileStreamSourceConnector",
+        "tasks.max": "1",
+        "file": "/path/to/input/file",
+        "topic": "my-topic"
+    }
+}
+```
+
+REST API를 호출하여 Connector를 생성합니다.
+
+```bash
+# 커넥터 생성 요청
+# curl -X POST -H "Content-Type: application/json" --data @config/connector-name.json http://localhost:8083/connectors
+```
+
+## 트러블 슈팅
+
+### `Failed to find any class that implements Connector and which name matches FileStreamSink`
+
+Kafka Connector 클래스를 못찾는 현상으로써 Kafka Connector는 plugin이므로 plugin의 경로를 지정해야 합니다.
+Kafka Connector를 실행시키기 위해서 필요한 환경설정 파일 (예; `connect-standalone.properties`)에 다음과 같이 Kafka Connector를 포함하는 JAR 파일을 지정합니다.
+
+```properties
+plugin.path=libs/connect-file-3.4.0.jar
+```
+
+기본 설정 파일 템플릿에는 다음과 같이 설명이 추가되어 있습니다. 디렉토리를 지정하거나, JAR 파일을 지정할 수 있습니다.
+
+```properties
+# Set to a list of filesystem paths separated by commas (,) to enable class loading isolation for plugins
+# (connectors, converters, transformations). The list should consist of top level directories that include 
+# any combination of: 
+# a) directories immediately containing jars with plugins and their dependencies
+# b) uber-jars with plugins and their dependencies
+# c) directories immediately containing the package directory structure of classes of plugins and their dependencies
+# Note: symlinks will be followed to discover dependencies or plugins.
+# Examples: 
+# plugin.path=/usr/local/share/java,/usr/local/share/kafka/plugins,/opt/connectors,
+#plugin.path=
+```
+
 ### 분산 모드로 실행
 
-분산 모드로 실행하기 위하서 다음과 같이 환경설정 파일을 구성합니다.
+분산 모드로 실행하기 위해서 다음과 같이 환경설정 파일을 구성합니다(예; `demo-connect-distributed.properties`).
 
 ```properties
 # config/connect-distributed.properties
@@ -107,36 +198,7 @@ status.storage.replication.factor=1
 rest.port=8083
 ```
 
-다음의 커맨드 라인으로 Connector를 실행합니다(Standalone, Distributed 모드에 따라서 다르게 실행할 수 있습니다.).
-
-```bash
-# STANDALONE MODE
-# bin/connect-standalone.sh config/connect-standalone.properties
-
-# DISTRIBUTED MODE
-# bin/connect-distributed.sh config/connect-distributed.properties
-```
-
-Connector를 배포하기 위해서 다음과 같이 JSON 파일을 작성합니다.
-
-```json
-{
-    "name": "my-source-connector",
-    "config": {
-        "connector.class": "org.apache.kafka.connect.file.FileStreamSourceConnector",
-        "tasks.max": "1",
-        "file": "/path/to/input/file",
-        "topic": "my-topic"
-    }
-}
-```
-
-REST API를 호출하여 Connector를 생성합니다.
-
-```bash
-# 커넥터 생성 요청
-# curl -X POST -H "Content-Type: application/json" --data @config/connector-name.json http://localhost:8083/connectors
-```
+나머지 설정은 Standalone 모드와 동일합니다.
 
 ## 참고
 
