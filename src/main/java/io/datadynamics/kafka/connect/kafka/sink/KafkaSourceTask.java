@@ -50,16 +50,16 @@ public class KafkaSourceTask extends SourceTask {
         ConsumerRecords<String, String> consumerRecords = consumer.poll(Duration.ofMillis(pollIntervalMs));
         for (ConsumerRecord<String, String> record : consumerRecords) {
             SourceRecord sourceRecord = new SourceRecord(
-                    Collections.singletonMap("source.topic", sourceTopic),
-                    Collections.singletonMap("offset", record.offset()),
-                    targetTopic, // 전송할 Topic
-                    null,
-                    Schema.STRING_SCHEMA, // 파티셔닝을 위한 키 스키마 (생략 가능)
-                    record.key(), // 파티셔닝을 위한 키 (생략 가능)
-                    Schema.STRING_SCHEMA, // 값의 스키마 (생략 가능)
-                    record.value(),
-                    null,
-                    (Iterable) getHeaders(record)); // 파일에서 읽어 들인 실제 데이터
+                    Collections.singletonMap("source.topic", sourceTopic),  // Source 정보
+                    Collections.singletonMap("offset", record.offset()),    // Offset
+                    targetTopic,                                            // 전송할 Topic
+                    null,                                                   // 파티션 번호
+                    Schema.STRING_SCHEMA,                                   // 파티셔닝을 위한 키 스키마 (생략 가능)
+                    record.key(),                                           // 파티셔닝을 위한 키 (생략 가능)
+                    Schema.STRING_SCHEMA,                                   // 값의 스키마 (생략 가능)
+                    record.value(),                                         // 파일에서 읽어 들인 실제 데이터
+                    null,                                                   // Timestamp
+                    (Iterable) getHeaders(record));                         // 원본 메시지의 헤더
             records.add(sourceRecord);
         }
         return records;
