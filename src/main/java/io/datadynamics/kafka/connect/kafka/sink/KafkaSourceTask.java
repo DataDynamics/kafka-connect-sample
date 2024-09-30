@@ -49,7 +49,6 @@ public class KafkaSourceTask extends SourceTask {
         List<SourceRecord> records = new ArrayList<>();
         ConsumerRecords<String, String> consumerRecords = consumer.poll(Duration.ofMillis(pollIntervalMs));
         for (ConsumerRecord<String, String> record : consumerRecords) {
-            List<Header> headers = getHeaders(record);
             SourceRecord sourceRecord = new SourceRecord(
                     Collections.singletonMap("source.topic", sourceTopic),
                     Collections.singletonMap("offset", record.offset()),
@@ -60,7 +59,7 @@ public class KafkaSourceTask extends SourceTask {
                     Schema.STRING_SCHEMA, // 값의 스키마 (생략 가능)
                     record.value(),
                     null,
-                    (Iterable) headers); // 파일에서 읽어 들인 실제 데이터
+                    (Iterable) getHeaders(record)); // 파일에서 읽어 들인 실제 데이터
             records.add(sourceRecord);
         }
         return records;
