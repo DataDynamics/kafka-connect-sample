@@ -47,7 +47,7 @@ public class KafkaSourceTask extends SourceTask {
     @Override
     public List<SourceRecord> poll() throws InterruptedException {
         List<SourceRecord> records = new ArrayList<>();
-        ConsumerRecords<String, String> consumerRecords = consumer.poll();
+        ConsumerRecords<String, String> consumerRecords = consumer.poll(Duration.ofMillis(pollIntervalMs));
         for (ConsumerRecord<String, String> record : consumerRecords) {
             SourceRecord sourceRecord = new SourceRecord(
                     Collections.singletonMap("source.topic", sourceTopic),  // Source 정보
@@ -62,9 +62,6 @@ public class KafkaSourceTask extends SourceTask {
                     (Iterable) getHeaders(record));                         // 원본 메시지의 헤더
             records.add(sourceRecord);
         }
-
-        Thread.sleep(pollIntervalMs);
-
         return records;
     }
 
