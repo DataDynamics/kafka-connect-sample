@@ -4,8 +4,8 @@ import org.apache.kafka.common.config.ConfigDef;
 import org.apache.kafka.connect.connector.Task;
 import org.apache.kafka.connect.source.SourceConnector;
 
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 public class KafkaSourceConnector extends SourceConnector {
 

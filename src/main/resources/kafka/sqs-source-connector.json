@@ -5,8 +5,10 @@
 		"tasks.max": "1",
 		"bootstrap.servers": "localhost:9092",
 		"group.id": "sqs-consumer",
-		"source.topic": "mytopic",
-		"target.topic": "mytopic1",
-		"poll.interval.ms": 1000
+		"source.topic": "all-messages",
+		"target.topic": "mytopic",
+		"poll.interval.ms": 1000,
+		"key.converter": "org.apache.kafka.connect.storage.StringConverter",
+		"value.converter": "org.apache.kafka.connect.storage.StringConverter"
 	}
 }

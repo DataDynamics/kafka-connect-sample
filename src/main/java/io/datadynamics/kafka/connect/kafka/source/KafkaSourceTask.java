@@ -5,16 +5,19 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.header.Header;
-import org.apache.kafka.common.header.Headers;
 import org.apache.kafka.common.header.internals.RecordHeader;
 import org.apache.kafka.connect.data.Schema;
 import org.apache.kafka.connect.source.SourceRecord;
 import org.apache.kafka.connect.source.SourceTask;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.util.*;
 
 public class KafkaSourceTask extends SourceTask {
+
+    Logger logger = LoggerFactory.getLogger(SourceTask.class);
 
     private KafkaConsumer<String, String> consumer;
     private String sourceTopic;
@@ -46,9 +49,12 @@ public class KafkaSourceTask extends SourceTask {
 
     @Override
     public List<SourceRecord> poll() throws InterruptedException {
+        logger.info("Poll()이 호출되었습니다.");
         List<SourceRecord> records = new ArrayList<>();
         ConsumerRecords<String, String> consumerRecords = consumer.poll(Duration.ofMillis(pollIntervalMs));
         for (ConsumerRecord<String, String> record : consumerRecords) {
+            logger.info("수신한 메시지 건수 : {}\n{}" + consumerRecords.count(), consumerRecords);
+
             SourceRecord sourceRecord = new SourceRecord(
                     Collections.singletonMap("source.topic", sourceTopic),  // Source 정보
                     Collections.singletonMap("offset", record.offset()),    // Offset
