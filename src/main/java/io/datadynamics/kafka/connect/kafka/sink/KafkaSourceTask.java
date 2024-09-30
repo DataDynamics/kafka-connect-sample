@@ -57,7 +57,7 @@ public class KafkaSourceTask extends SourceTask {
                     Schema.STRING_SCHEMA,                                   // 파티셔닝을 위한 키 스키마 (생략 가능)
                     record.key(),                                           // 파티셔닝을 위한 키 (생략 가능)
                     Schema.STRING_SCHEMA,                                   // 값의 스키마 (생략 가능)
-                    record.value(),                                         // 파일에서 읽어 들인 실제 데이터
+                    record.value(),                                         // 원본 메시지의 실제 데이터
                     null,                                                   // Timestamp
                     (Iterable) getHeaders(record));                         // 원본 메시지의 헤더
             records.add(sourceRecord);
