@@ -1,9 +1,10 @@
 <?xml version="1.0"  encoding="UTF-8"?>
-<project name="deploy" default="copy" basedir=".">
+<project name="Deploy Kafka Connector" default="copy" basedir=".">
 
-    <property name="kafka.libs.dir" value="/Users/fharenheit/projects/kafka/kafka/libs"/>
+    <!-- Kafka의 libs 디렉토리 -->
+    <property name="kafka.libs.dir" value="${user.home}/projects/kafka/kafka/libs"/>
 
-    <target name="copy">
+    <target name="copy" description="Kafka Connector JAR 파일을 Kafka의 libs 디렉토리에 복사">
         <copy todir="${kafka.libs.dir}" verbose="true" overwrite="true">
             <fileset dir="target" includes="*.jar"/>
         </copy>

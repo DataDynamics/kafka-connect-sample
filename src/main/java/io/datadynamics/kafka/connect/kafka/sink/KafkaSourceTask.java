@@ -4,6 +4,9 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.common.header.Header;
+import org.apache.kafka.common.header.Headers;
+import org.apache.kafka.common.header.internals.RecordHeader;
 import org.apache.kafka.connect.data.Schema;
 import org.apache.kafka.connect.source.SourceRecord;
 import org.apache.kafka.connect.source.SourceTask;
@@ -45,18 +48,33 @@ public class KafkaSourceTask extends SourceTask {
     public List<SourceRecord> poll() throws InterruptedException {
         List<SourceRecord> records = new ArrayList<>();
         ConsumerRecords<String, String> consumerRecords = consumer.poll(Duration.ofMillis(pollIntervalMs));
-        for (ConsumerRecord<String, String> consumerRecord : consumerRecords) {
+        for (ConsumerRecord<String, String> record : consumerRecords) {
+            List<Header> headers = getHeaders(record);
             SourceRecord sourceRecord = new SourceRecord(
                     Collections.singletonMap("source.topic", sourceTopic),
-                    Collections.singletonMap("offset", consumerRecord.offset()),
+                    Collections.singletonMap("offset", record.offset()),
                     targetTopic, // 전송할 Topic
+                    null,
                     Schema.STRING_SCHEMA, // 파티셔닝을 위한 키 스키마 (생략 가능)
-                    consumerRecord.key(), // 파티셔닝을 위한 키 (생략 가능)
+                    record.key(), // 파티셔닝을 위한 키 (생략 가능)
                     Schema.STRING_SCHEMA, // 값의 스키마 (생략 가능)
-                    consumerRecord.value()); // 파일에서 읽어 들인 실제 데이터
+                    record.value(),
+                    null,
+                    (Iterable) headers); // 파일에서 읽어 들인 실제 데이터
             records.add(sourceRecord);
         }
         return records;
+    }
+
+    /**
+     * Kafka Topic에서 수신한 메시지를 재전송하기 위해서 org.apache.kafka.connect.source.SourceRecord의 Header로 변경한다.
+     */
+    private static List<Header> getHeaders(ConsumerRecord<String, String> record) {
+        List<Header> headers = new ArrayList<>();
+        record.headers().forEach(header -> {
+            headers.add(new RecordHeader(header.key(), header.value()));
+        });
+        return headers;
     }
 
     @Override
