@@ -1,13 +1,28 @@
 <?xml version="1.0"  encoding="UTF-8"?>
-<project name="Deploy Kafka Connector" default="copy" basedir=".">
+<project name="Deploy Kafka Connector" basedir=".">
 
-    <!-- Kafka의 libs 디렉토리 -->
-    <property name="kafka.libs.dir" value="${user.home}/projects/kafka/kafka/libs"/>
+	<property file="build.properties"/>
+	<property name="target" value="${basedir}/target"/>
+	<property name="targetDir" value="/var/lib/kafka"/>
 
-    <target name="copy" description="Kafka Connector JAR 파일을 Kafka의 libs 디렉토리에 복사">
-        <copy todir="${kafka.libs.dir}" verbose="true" overwrite="true">
-            <fileset dir="target" includes="*.jar"/>
-        </copy>
-    </target>
+	<target name="copy" description="Kafka Connector JAR 파일을 Kafka의 libs 디렉토리에 복사">
+		<copy todir="${kafka.libs.dir}" verbose="true" overwrite="true">
+			<fileset dir="target" includes="*.jar"/>
+		</copy>
+	</target>
+
+	<!--
+		scp task는 jsch-0.1.2 이후 버전이 필요하며 https://repo1.maven.org/maven2/com/jcraft/jsch/0.1.55/jsch-0.1.55.jar 을 다운로드하여
+		IntelliJ IDEA의 경우 <USER_HOME>/.ant/lib 디렉토리에 복사하도록 합니다.
+		Apache Ant의 경우 <ANT_HOME>/lib 디렉토리에 복사하도록 합니다.
+	-->
+
+	<target name="scp" description="Cloudera CDP의 Kafka Connector 경로에 업로드를 한다.">
+		<scp todir="${username}:${password}@${host}:${targetDir}" trust="true" verbose="true" failonerror="true">
+			<fileset dir="${target}">
+				<include name="*.tar"/>
+			</fileset>
+		</scp>
+	</target>
 
 </project>

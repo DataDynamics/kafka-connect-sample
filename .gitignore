@@ -1,6 +1,9 @@
 # IntelliJ
 .idea
 
+# Ant
+build.properties
+
 # Maven
 target
 

@@ -1,4 +1,4 @@
-package io.datadynamics.kafka.connect.kafka.sink;
+package io.datadynamics.kafka.connect.kafka.source;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
