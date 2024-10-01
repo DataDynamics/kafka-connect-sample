@@ -17,7 +17,7 @@
 		<kafka.version>3.4.1</kafka.version>
 
 		<!-- Spring Framework -->
-		<spring.version>5.3.40</spring.version>
+		<spring.version>5.3.39</spring.version>
 
 		<!-- caffeine -->
 		<caffeine.version>3.1.8</caffeine.version>
