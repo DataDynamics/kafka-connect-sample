@@ -1,0 +1,14 @@
+{
+  "meesageId": "test",
+  "id": "test",
+  "datalakeName": "test",
+  "dataPath:": "/path",
+  "fileName": "filename",
+  "fullPath": "path",
+  "filesize": 1,
+  "time": "2024-07-23 11:22:33",
+  "rows": 100,
+  "host": "hostname",
+  "createDateTs": "2024-07-23 11:22:33",
+  "updateDateTs": "2024-07-23 11:22:33"
+}
