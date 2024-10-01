@@ -1,6 +1,6 @@
-# Kafka Connector 예제
+# Kafka Connect Sample Project
 
-## 용어
+## Glossary
 
 * Kafka Connect
   * Kafka와 타 시스템 간 안정적이고 확장가능한 데이터 스트리밍을 지원하는 툴
@@ -42,7 +42,7 @@
 # mvn clean package
 ```
 
-## Kafka Connector 개요
+## Kafka Connector Concept
 
 ### 장점
 
@@ -268,3 +268,5 @@ Kafka Connect API로 Plugin을 개발하여 배포시 제대로 로딩하지 못
 * [Kafka Connect CLI Tutorial](https://learn.conduktor.io/kafka/kafka-connect-cli-tutorial/)
 * [How to Install and Run a Custom Connector](https://github.com/enfuse/kafka-connect-demo/blob/master/docs/install-connector.md)
 * [(YouTube) Kafka Connect Standalone Mode Example](https://www.youtube.com/watch?app=desktop&v=G6YlWrKZK0E)
+* [KIP-449: Add connector contexts to Connect worker logs](https://cwiki.apache.org/confluence/display/KAFKA/KIP-449%3A+Add+connector+contexts+to+Connect+worker+logs)
+* [Developing Custom Transformations in Kafka Connect](https://uuidable.com/developing-custom-transformations-in-kafka-connect/)

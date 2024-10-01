@@ -46,6 +46,13 @@
 			<version>${kafka.version}</version>
 		</dependency>
 
+		<!-- Kafka Connect Transforms -->
+		<dependency>
+			<groupId>org.apache.kafka</groupId>
+			<artifactId>connect-transforms</artifactId>
+			<version>${kafka.version}</version>
+		</dependency>
+
 		<!-- Kafka Clients -->
 		<dependency>
 			<groupId>org.apache.kafka</groupId>
