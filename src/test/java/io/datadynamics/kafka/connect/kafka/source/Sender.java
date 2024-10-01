@@ -36,11 +36,7 @@ public class Sender {
 
         KafkaProducer<String, String> producer = new KafkaProducer<>(kafkaProps);
 
-        DefaultResourceLoader loader = new DefaultResourceLoader();
-        Resource resource = loader.getResource("classpath:test-message.json");
-        InputStream is = resource.getInputStream();
-        String json = new String(IOUtils.toByteArray(is));
-        IOUtils.closeQuietly(is);
+        String json = getMessageJson();
 
         System.out.println(json);
 
@@ -72,5 +68,14 @@ public class Sender {
         } finally {
             producer.close();
         }
+    }
+
+    private static String getMessageJson() throws IOException {
+        DefaultResourceLoader loader = new DefaultResourceLoader();
+        Resource resource = loader.getResource("classpath:test-message.json");
+        InputStream is = resource.getInputStream();
+        String json = new String(IOUtils.toByteArray(is));
+        IOUtils.closeQuietly(is);
+        return json;
     }
 }

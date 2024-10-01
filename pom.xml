@@ -18,6 +18,9 @@
 
 		<!-- Spring Framework -->
 		<spring.version>5.3.39</spring.version>
+
+		<!-- caffeine -->
+		<caffeine.version>3.1.8</caffeine.version>
 	</properties>
 
 	<build>
@@ -31,7 +34,6 @@
 					<encoding>${project.build.sourceEncoding}</encoding>
 				</configuration>
 			</plugin>
-
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -68,6 +70,10 @@
 									<pattern>org.aopalliance</pattern>
 									<shadedPattern>shaded.org.aopalliance</shadedPattern>
 								</relocation>
+								<relocation>
+									<pattern>com.github</pattern>
+									<shadedPattern>shaded.com.github</shadedPattern>
+								</relocation>
 							</relocations>
 						</configuration>
 					</execution>
@@ -77,6 +83,16 @@
 	</build>
 
 	<dependencies>
+		<!-- ======= -->
+		<!-- Ehcache -->
+		<!-- ======= -->
+
+		<dependency>
+			<groupId>com.github.ben-manes.caffeine</groupId>
+			<artifactId>caffeine</artifactId>
+			<version>${caffeine.version}</version>
+		</dependency>
+
 		<!-- =============== -->
 		<!-- Spring Framework-->
 		<!-- =============== -->
