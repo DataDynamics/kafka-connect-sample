@@ -1,12 +1,46 @@
 # Kafka Connector 예제
 
+## 용어
+
+* Kafka Connect
+  * Kafka와 타 시스템 간 안정적이고 확장가능한 데이터 스트리밍을 지원하는 툴
+* Kafka Connector 
+  * Task 및 데이터 스트리밍을 관리하는 주체
+  * 높은 수준의 추상화 레벨을 제공
+  * 종류
+    * Source Connector - 외부 시스템에서 데이터를 읽어서 Kafka Topic에 데이터를 전송
+    * Sink Connector - Kafka Topic에서 데이터를 읽어서 외부 시스템에 전송
+* Task
+  * Kafka에서 데이터를 복사하거나, Kafka로 데이터를 복사하는 실제 구현 코드
+* Worker
+  * Connector 및 Task를 실행하는 프로세스
+* Converter
+  * Kafka Connect와 외부 시스템의 데이터를 주고받을때 데이터를 변환
+* Transform
+  * Connector로 데이터를 송신하거나 수신하는 메시지를 변환하는 간단한 로직
+* Config Provider
+  * Configuration 정보를 제공하는 제공자
+* Dead Letter Queue
+  * Connect가 connector의 에러를 처리
+  * 일반으로 Message Queue에서는 메시지를 처리하다가 더이상 처리할 수 없을때 해당 메시지를 어딘가에 저장해서 손실을 방지해야 하는데 이때 보내는 Queue가 DLQ
+* Plugin
+  * Connector, Converter, Transform, Config Provider 등을 plugin이라고 표현
+  * 하나의 JAR 파일에는 다수의 plugin이 포함되어 있음
+
+결론적으로 Kafka Connect는 개발한 Kafka Connector를 실행하는 주체이고 프로세스이며, 개발자는 필요에 따라서 JAR 파일 형태로 다수의 plugin을 개발하여 배포하고 Kafka Connect가 이를 실행할 수 있도록 구성할 수 있음 
+
+## Requirement
+
+* JDK 11
+* Kafka 3.4.1 이상 또는 Cloudera CDP 7.1.9 이상
+
 ## Build
 
 ```
 # mvn clean package
 ```
 
-## Kafka Connector
+## Kafka Connector 개요
 
 ### 장점
 
@@ -40,7 +74,9 @@
   * 장애 발생시 타 Task가 대신 수행
   * 중앙 집중식 관리 (REST API)
 
-### Kafka 설정
+## Kafka 설정
+
+### Standalone Kafka 설정
 
 테스트를 위해서 Kafka를 다운로드하고 다음과 같이 환경을 구성합니다.
 
@@ -63,9 +99,21 @@
 # sh kafka-topics.sh --list --bootstrap-server localhost:9092
 ```
 
-### Kafka Connector 관련 속성
+### Cloudera CDP Kafka 설정
 
-#### 공통 속성
+Cloudera CDP에서는 다음을 구성합니다.
+
+* ZooKeeper 설치 (필수)
+* Kafka Cluster 설치 (필수)
+* Kafka Connector 설치 (필수)
+* Streams Messaging Manager 설치 (필수)
+  * Kafka Connector를 포함한 각종 plugin 설정은 SMM에서 가능
+
+## Kafka Connector 관련 속성
+
+Cloudera CDP의 경우 Cloudera Manager의 Configuration에서 설정하도록 하며 Cloudera CDP의 경우 대부분 기본으로 설정이 되어 있습니다.
+
+### 공통 속성
 
 Kafka Connector에서 사용하는 공통 속성은 다음과 같습니다(예; `demo-connect-standalone.properties`). 
 
@@ -76,6 +124,10 @@ value.converter=org.apache.kafka.connect.json.JsonConverter
 tasks.max=1
 schema.registry.url=http://localhost:8081
 ```
+
+`key.converter`와 `value.converter`은 Kafka Connector의 설정이지만 각 Kafka Connector 
+
+## Kafka Connect 실행
 
 ### Standalone 모드로 실행
 
@@ -102,7 +154,7 @@ plugin.path=/Users/fharenheit/Projects/kafka/kafka/libs
 
 ```properties
 name=local-file-sink
-# 아래 connector.class 설정 모두 적용됨
+# 아래 connector.class 설정 모두 적용됨 (FileStreamSink는 Alias)
 #connector.class=FileStreamSink
 connector.class=org.apache.kafka.connect.file.FileStreamSinkConnector
 tasks.max=1
@@ -207,9 +259,23 @@ plugin.path=libs/connect-file-3.4.0.jar
 # plugin.path=/usr/local/share/java,/usr/local/share/kafka/plugins,/opt/connectors,
 #plugin.path=
 ```
+### Kafka Connector 로딩 실패
+
+Kafka Connect API로 Plugin을 개발하여 배포시 제대로 로딩하지 못하는 경우 다음의 로그가 정상적으로 출력되는지 로그 파일을 확인합니다. 정상적으로 배포되었다면 `Added aliases ...` 등의 로그 파일이 기록됩니다.
+
+```
+...
+2024-09-30T06:12:04,563 INFO org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader: Loading plugin from: /var/lib/kafka/kafka-connect-sample-1.0.0.jar
+2024-09-30T06:12:04,567 INFO org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader: Registered loader: PluginClassLoader{pluginLocation=file:/var/lib/kafka/kafka-connect-sample-1.0.0.jar}
+...
+2024-09-30T07:16:42,549 INFO org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader: Added aliases 'KafkaSourceConnector' and 'KafkaSource' to plugin 'io.datadynamics.kafka.connect.kafka.source.KafkaSourceConnector'
+```
+
+만약 로그 파일이 일부만 기록된다면 Kafka Connect 서비스의 JDK와 개발한 Plugin의 JDK가 버전이 동일한지 확인합니다.
 
 ## 참고
 
+* [Kafka Connect](https://docs.confluent.io/platform/current/connect/index.html)
 * [Deploy Kafka Connect](https://developer.confluent.io/courses/kafka-connect/deployment/?utm_medium=sem&utm_source=google&utm_campaign=ch.sem_br.nonbrand_tp.prs_tgt.dsa_mt.dsa_rgn.apac_lng.eng_dv.all_con.confluent-developer&utm_term=&creative=&device=c&placement=&gad_source=1&gclid=CjwKCAjw9eO3BhBNEiwAoc0-jYXuADg1BhBHF88VmwlvE272B0wlrcnPTnb9ZIVV3kP8CqQRZDHNcRoCFhQQAvD_BwE)
 * [How to Use Kafka Connect - Get Started](https://docs.confluent.io/platform/current/connect/userguide.html)
 * [Apache Kafka Guide #51 Kafka Connect: Standalone vs Distributed Mode](https://medium.com/apache-kafka-from-zero-to-hero/apache-kafka-guide-51-kafka-connect-standalone-vs-distributed-mode-e4486eb4074f#id_token=eyJhbGciOiJSUzI1NiIsImtpZCI6IjVhYWZmNDdjMjFkMDZlMjY2Y2NlMzk1YjIxNDVjN2M2ZDQ3MzBlYTUiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiIyMTYyOTYwMzU4MzQtazFrNnFlMDYwczJ0cDJhMmphbTRsamRjbXMwMHN0dGcuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiIyMTYyOTYwMzU4MzQtazFrNnFlMDYwczJ0cDJhMmphbTRsamRjbXMwMHN0dGcuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDU5OTk0NTcwMzk1MzY5ODI3MDciLCJlbWFpbCI6ImZoYXJlbmhlaXRAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsIm5iZiI6MTcyNzYxMDkwNywibmFtZSI6Iuq5gOuzkeqzpCIsInBpY3R1cmUiOiJodHRwczovL2xoMy5nb29nbGV1c2VyY29udGVudC5jb20vYS9BQ2c4b2NKREZJb0pabWJFdHNQUC1NUGJQVHU0UzBlSGpxWHV5czloN0hHeTVuRG41aFlVeUJzdj1zOTYtYyIsImdpdmVuX25hbWUiOiLrs5Hqs6QiLCJmYW1pbHlfbmFtZSI6Iuq5gCIsImlhdCI6MTcyNzYxMTIwNywiZXhwIjoxNzI3NjE0ODA3LCJqdGkiOiI5NzFjMDU4ZjJmZGE0MzM2YTQyYWY1YzlkZjBiYTUxMDg3ZWNmNjE0In0.HZ3tJGzwGAl0bJeX0mK-VL-YGqMCEXRmF9vEBTWp2S0jR75LFs03pEKCnYHb8WAxF0YsR4Ngxv6DgAVDEzONyIFeP_k-jdZ34jJx8K0TWNIalQyZPDzhXQMpj8kz3owWyrfOI-LHOyQEY6npa1vKtFuZzuctsowrv_fike0uP7IWV2uNrwsHfhEOHFrohIzA9cy7eLSsxy2D9NgCDuM-57Y5RpuNnUV5l_6_e8b3TtTmJbprl-A6ZVusGkdEirhYcLCLqCCLqcyJkO06R-LuiV35oTERuudBvU57W00T2jsY9z-rw433QGPr6IsAAdV8JQJxFFysJyXYRYA8Y7sWjw)
