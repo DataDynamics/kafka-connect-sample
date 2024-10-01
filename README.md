@@ -14,6 +14,8 @@
   * Kafka에서 데이터를 복사하거나, Kafka로 데이터를 복사하는 실제 구현 코드
 * Worker
   * Connector 및 Task를 실행하는 프로세스
+  * Kafka Connect를 실행하는 프로세스 정도로 이해할 수 있으며
+  * Kafka Connect의 인스턴스라고 볼 수 있음
 * Converter
   * Kafka Connect와 외부 시스템의 데이터를 주고받을때 데이터를 변환
 * Transform
@@ -62,16 +64,18 @@
 * 단일 쓰레드
 * Kafka Topic에서 데이터를 수신해서 외부 리소스에 데이터를 전송
 
-### 동작 모드
+## Kafka Connect의 동작 모드 (=Worker의 동작 모드)
 
 * 스탠드얼론 모든
-  * 단일 인스턴스로 실행(클러스터 불필요)
+  * 단일 인스턴스로 모든 커넥터와 태스크가 실행
   * 구성 파일의 설정이 단순
   * 빠르게 구성하고 테스트 가능
   * 확장성 부족
 * 분산 모드
-  * 여러 Task을 클러스터로 실행
-  * 장애 발생시 타 Task가 대신 수행
+  * 여러 커넥터와 태스크를 다수의 프로세스(worker)에서 나누어서 실행
+  * 프로세스(worker)가 강제로 종료되거나, 신규로 추가되거나, 실패시 자동으로 커넥터 및 태스크가 재분배
+  * 같은 프로세스(worker)는 같은 `group.id`를 가짐
+  * 클러스터로 동작
   * 중앙 집중식 관리 (REST API)
 
 ## Kafka 설정
@@ -109,27 +113,9 @@ Cloudera CDP에서는 다음을 구성합니다.
 * Streams Messaging Manager 설치 (필수)
   * Kafka Connector를 포함한 각종 plugin 설정은 SMM에서 가능
 
-## Kafka Connector 관련 속성
-
-Cloudera CDP의 경우 Cloudera Manager의 Configuration에서 설정하도록 하며 Cloudera CDP의 경우 대부분 기본으로 설정이 되어 있습니다.
-
-### 공통 속성
-
-Kafka Connector에서 사용하는 공통 속성은 다음과 같습니다(예; `demo-connect-standalone.properties`). 
-
-```properties
-bootstrap.servers=localhost:9092
-key.converter=org.apache.kafka.connect.json.JsonConverter
-value.converter=org.apache.kafka.connect.json.JsonConverter
-tasks.max=1
-schema.registry.url=http://localhost:8081
-```
-
-`key.converter`와 `value.converter`은 Kafka Connector의 설정이지만 각 Kafka Connector 
-
 ## Kafka Connect 실행
 
-### Standalone 모드로 실행
+### Standalone 모드로 실행 (Worker의 동작모드가 Standalone)
 
 테스트를 위해서 `demo-connect-standalone.properties` 파일을 다음과 같이 작성했습니다.
 
@@ -201,7 +187,7 @@ REST API를 호출하여 Connector를 생성합니다.
 # sh kafka-console-producer.sh --topic mytopic --bootstrap-server localhost:9092
 ```
 
-### 분산 모드로 실행
+### 분산 모드로 실행 (Worker의 동작모드가 Distributed)
 
 분산 모드로 실행하기 위해서 다음과 같이 환경설정 파일을 구성합니다(예; `demo-connect-distributed.properties`).
 
