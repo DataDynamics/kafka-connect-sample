@@ -1,6 +1,15 @@
 <?xml version="1.0"  encoding="UTF-8"?>
 <project name="Deploy Kafka Connector" basedir=".">
 
+	<!--
+		build.properties 파일을 생성하고 이 파일에 다음의 변수에 값을 추가합니다.
+
+		- kafka.libs.dir
+		- host
+		- username
+		- password
+	-->
+
 	<property file="build.properties"/>
 	<property name="target" value="${basedir}/target"/>
 	<property name="targetDir" value="/var/lib/kafka"/>
@@ -17,7 +26,7 @@
 		Apache Ant의 경우 <ANT_HOME>/lib 디렉토리에 복사하도록 합니다.
 	-->
 
-	<target name="scp" description="Cloudera CDP의 Kafka Connector 경로에 업로드를 한다.">
+	<target name="scp" description="Cloudera CDP의 Kafka Connector 경로에 업로드">
 		<scp todir="${username}:${password}@${host}:${targetDir}" trust="true" verbose="true" failonerror="true">
 			<fileset dir="${target}">
 				<include name="*.tar"/>
