@@ -15,6 +15,9 @@
 
 		<!-- Kafka -->
 		<kafka.version>3.4.1</kafka.version>
+
+		<!-- Spring Framework -->
+		<spring.version>5.3.39</spring.version>
 	</properties>
 
 	<build>
@@ -28,48 +31,110 @@
 					<encoding>${project.build.sourceEncoding}</encoding>
 				</configuration>
 			</plugin>
+
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>3.6.0</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<shadedArtifactAttached>true</shadedArtifactAttached>
+							<shadedClassifierName>shaded</shadedClassifierName>
+
+							<relocations>
+								<relocation>
+									<pattern>org.springframework</pattern>
+									<shadedPattern>shaded.org.springframework</shadedPattern>
+								</relocation>
+								<relocation>
+									<pattern>org.apache.commons</pattern>
+									<shadedPattern>shaded.org.apache.commons</shadedPattern>
+								</relocation>
+								<relocation>
+									<pattern>lombok</pattern>
+									<shadedPattern>shaded.lombok</shadedPattern>
+								</relocation>
+								<relocation>
+									<pattern>com</pattern>
+									<shadedPattern>shaded.com</shadedPattern>
+								</relocation>
+								<relocation>
+									<pattern>org.aopalliance</pattern>
+									<shadedPattern>shaded.org.aopalliance</shadedPattern>
+								</relocation>
+							</relocations>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 
 	<dependencies>
-		<!-- Kafka Connect API -->
+		<!-- =============== -->
+		<!-- Spring Framework-->
+		<!-- =============== -->
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<!-- ===== -->
+		<!-- Kafka -->
+		<!-- ===== -->
+
 		<dependency>
 			<groupId>org.apache.kafka</groupId>
 			<artifactId>connect-api</artifactId>
 			<version>${kafka.version}</version>
+			<scope>provided</scope>
 		</dependency>
 
-		<!-- Kafka Connect JSON Converter -->
 		<dependency>
 			<groupId>org.apache.kafka</groupId>
 			<artifactId>connect-json</artifactId>
 			<version>${kafka.version}</version>
+			<scope>provided</scope>
 		</dependency>
 
-		<!-- Kafka Connect Transforms -->
 		<dependency>
 			<groupId>org.apache.kafka</groupId>
 			<artifactId>connect-transforms</artifactId>
 			<version>${kafka.version}</version>
+			<scope>provided</scope>
 		</dependency>
 
-		<!-- Kafka Clients -->
 		<dependency>
 			<groupId>org.apache.kafka</groupId>
 			<artifactId>kafka-clients</artifactId>
 			<version>${kafka.version}</version>
+			<scope>provided</scope>
 		</dependency>
 
-		<!-- Optional: SLF4J for logging -->
+		<!-- ============= -->
+		<!-- SLF4J Logging -->
+		<!-- ============= -->
+
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<version>2.0.9</version>
+			<scope>provided</scope>
 		</dependency>
+
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>2.0.9</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 </project>

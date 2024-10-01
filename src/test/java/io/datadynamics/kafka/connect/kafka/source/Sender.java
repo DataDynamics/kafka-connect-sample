@@ -7,6 +7,7 @@ import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,6 +16,16 @@ import java.util.Properties;
 public class Sender {
 
     public static void main(String[] args) throws IOException {
+        rest();
+    }
+
+    public static void rest() throws IOException {
+        RestTemplate template = new RestTemplate();
+        String html = template.getForObject("https://www.naver.com", String.class);
+        System.out.println(html);
+    }
+
+    public static void send() throws IOException {
         Properties kafkaProps = new Properties();
         kafkaProps.put("bootstrap.servers", "10.0.1.67:9092,10.0.1.68:9092,10.0.1.69:9092");
         kafkaProps.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
